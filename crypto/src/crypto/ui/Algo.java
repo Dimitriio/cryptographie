@@ -78,7 +78,8 @@ public class Algo {
 		for(;f.hasNext();){
 			Point p1 = f.next();
 			Point p2 = l.next();
-		
+			
+			System.out.println("Crypting zone between point" + p1 + " and " + p2);
 			// Reading the area to encrypt and encrypting every pixel of it.
 			for(int x = p1.x; x < p2.x; x++){
 				for(int y = p1.y; y < p2.y; y++){
@@ -95,7 +96,7 @@ public class Algo {
 					image.setRGB(x, y, r.nextInt());
 				}
 			}
-			
+			System.out.println("Done crypting this area");
 		}
 		
 		// Creating the coded element with byte[] of encrypted and Image
@@ -158,5 +159,9 @@ public class Algo {
 	public static SecretKey stringToSecretKey(String encodedKey){
 		byte[] decodedKey = Base64.getDecoder().decode(encodedKey);
 		return new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
+	}
+	
+	public static void main(String[] args) {
+		
 	}
 }
