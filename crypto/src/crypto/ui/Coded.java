@@ -23,8 +23,8 @@ public class Coded implements Serializable{
 	public Coded(byte[] crypted, byte[] image, String decodedKey, ArrayList<Point> firsts, ArrayList<Point> lasts, String ext) {
 		/**This is the constructor of Coded, it created a coded file to save with encrypted data and the image; 
 		 * It takes the decodedKey but it does not Serialize it
-		 * x1 and y1 are the coordinates of the top left point of the encrypted area
-		 * x2 and y2 are the coordinates of the bottom right point of the encrypted area
+		 * firsts is the list of top left point of the encrypted areas
+		 * lasts is the list of bottom right point of the encrypted areas
 		 */
 
 		this.crypted = crypted;
