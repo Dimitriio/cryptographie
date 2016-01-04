@@ -76,7 +76,6 @@ public class CryptoController extends Controller{
 	{
 		if(mousePressed==true)
 		{
-			
 			super.getView().setModel(this.getModel());
 			super.getView().repaint();
 		}
