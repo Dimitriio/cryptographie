@@ -22,6 +22,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
+import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import ui.Controller;
@@ -190,6 +191,23 @@ public class CryptoController extends Controller{
 				((Picture) getModel()).getCoded().printFile(new File(part+".cry"));
 			} catch (IOException e1) {
 			}
+		}
+	}
+	public class GetKey extends AbstractAction
+	{
+		CryptoView cview;
+		
+		public GetKey(View view)
+		{
+			super("Enter Key");
+			putValue(SHORT_DESCRIPTION, "Enter Key");
+			//putValue(MNEMONIC_KEY, mnemonic);
+			this.cview=(CryptoView) view;
+		}
+
+		public void actionPerformed(ActionEvent e)
+		{
+			// il reste à ajouter comment récuperer le text du jtextfield
 		}
 	}
 }
