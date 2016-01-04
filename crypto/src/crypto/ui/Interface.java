@@ -2,15 +2,12 @@ package crypto.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-import crypto.ui.CryptoController.GetKey;
 
 public class Interface extends JFrame
 {
@@ -40,7 +37,6 @@ public class Interface extends JFrame
 		buttons.add(new JButton(((CryptoController)this.cview.getController()).new OpenFileAction(cview)));
 		buttons.add(new JButton(((CryptoController)this.cview.getController()).new EncryptAction(cview)));
 		buttons.add(new JButton(((CryptoController)this.cview.getController()).new SaveAction(cview))); 
-		buttons.add(new JButton(((CryptoController)this.cview.getController()).new GetKey(cview))); 
 		buttons.add(textField);
 		this.cview.setField(textField);
 

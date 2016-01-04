@@ -1,32 +1,21 @@
 package crypto.ui;
 
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
-import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import crypto.ui.Coded;
@@ -238,23 +227,4 @@ public class CryptoController extends Controller{
 			this.cview.repaint();
 		}
 	}
-	public class GetKey extends AbstractAction
-	{
-		CryptoView cview;
-		
-		public GetKey(View view)
-		{
-			super("Enter Key");
-			putValue(SHORT_DESCRIPTION, "Enter Key");
-			//putValue(MNEMONIC_KEY, mnemonic);
-			this.cview=(CryptoView) view;
-		}
-
-		public void actionPerformed(ActionEvent e)
-		{
-			// il reste à ajouter comment récuperer le text du jtextfield
-		}
-	}
-	
-
 }
