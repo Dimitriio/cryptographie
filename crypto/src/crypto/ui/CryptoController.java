@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -132,8 +134,8 @@ public class CryptoController extends Controller{
 		
 		public EncryptAction(View view)
 		{
-			super("Encrypt");
-			putValue(SHORT_DESCRIPTION, "Encrypt selected");
+			super("Encrypt/Uncrypt");
+			putValue(SHORT_DESCRIPTION, "Encrypt selected/Uncrypt selected");
 			//putValue(MNEMONIC_KEY, mnemonic);
 			this.cview=(CryptoView) view;
 		}
@@ -141,12 +143,25 @@ public class CryptoController extends Controller{
 		public void actionPerformed(ActionEvent e)
 		{
 			Picture picture = (Picture) getModel();
+			Pattern p = Pattern.compile("(.*?).cry");
+			Matcher m = p.matcher(picture.getFile().getName());
+			if(!m.find()){
 			try {
 				((Picture)getModel()).setCoded(Algo.encryption(picture.getFile(),picture.getFirsts(), picture.getLasts()));
 			} catch (Exception exc) {
 			}
 			((View) this.cview).setModel(this.cview.getController().getModel());
 			this.cview.repaint();
+		}else{
+			/*try {
+				((Picture)getModel()).setCoded(Algo.encryption(picture.getFile(),picture.getFirsts(), picture.getLasts()));
+			} catch (Exception exc) {
+			}
+			((View) this.cview).setModel(this.cview.getController().getModel());
+			this.cview.repaint();
+		*/
+			System.out.println("je decrypte");
+		}
 		}
 	}
 
