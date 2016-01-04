@@ -3,7 +3,6 @@ package crypto.ui;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.util.Iterator;
 
 import javax.swing.AbstractAction;
 

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class Picture {
+	
 	// reste a definir ce que doivent etre les attributs
 	
 	/*public void addAttributes(Attributes a){
