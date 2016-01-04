@@ -35,47 +35,87 @@ public class Coded implements Serializable{
 		this.lasts = lasts;
 	}
 
+	/**
+	  * printFie is a method which display a file on the frame.
+	  * @param output - file that we want to display.
+	  * @throws IOException
+	  */
 	public void printFile(File output) throws IOException{
 		ByteArrayInputStream bais = new ByteArrayInputStream(image); 
 		BufferedImage buffer = ImageIO.read(bais);
 		ImageIO.write(buffer, "JPG", output);
 	}
 	
+	/**
+	  * getBuffImage is a getter which gets the image
+	  * @return the image
+	  * @throws IOException
+	  */
 	public BufferedImage getBuffImage() throws IOException{
 		ByteArrayInputStream bais = new ByteArrayInputStream(image); 
 		return ImageIO.read(bais);
 	}
 
+	 /**
+	  * getKey is a getter which gets the key
+	  * @return the decoded key
+	  */
 	public String getKey() {
 		return this.decodedKey;
 	}
 
+	 /**
+	  * setKey is a setter which sets the key
+	  * @param decodedKey - the decoded key to be set
+	  */
 	public void setKey(String decodedKey) {
 		this.decodedKey = decodedKey;
 	}
 	
+	/**
+	  * getFirsts is a getter which gets the array list of firsts points.
+	  * @return an array list of firsts' points.
+	  */
 	public ArrayList<Point> getFirsts(){
 		return this.firsts;
 	}
 	
+	 /**
+	  * getLasts is a getter which gets the array list of lasts points.
+	  * @return an array list of lasts' points.
+	  */
 	public ArrayList<Point> getLasts(){
 		return this.lasts;
 	}
 
-
+	/**
+	  * getCrypted is a getter which gets the byte's table of encrypted image.
+	  * @return the byte's table
+	  */
 	public byte[] getCrypted() {
 		return this.crypted;
 	}
 
-
+	 /**
+	  *getImage is a getter which gets the image in a byte's table form.
+	  * @return the byte's table of this image.
+	  */
 	public byte[] getImage() {
 		return this.image;
 	}
 
+	 /**
+	  * getEx is a getter which gets the extension of file.
+	  * @return the extension of file.
+	  */
 	public String getExt() {
 		return ext;
 	}
 
+	 /**
+	  * setEx is a setter which sets the extension of file.
+	  * @param ext - the extension of file to be set
+	  */
 	public void setExt(String ext) {
 		this.ext = ext;
 	}
