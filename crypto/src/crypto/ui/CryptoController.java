@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Scanner;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -137,18 +138,15 @@ public class CryptoController extends Controller{
 		public void actionPerformed(ActionEvent e)
 		{
 			Picture picture = (Picture) getModel();
-			for(int i = 0; i< picture.getFirsts().size(); i++)
-			{
-				try {
-					Algo.encryption(picture.getFile(),(int) picture.getFirsts().get(i).getX(), (int)picture.getFirsts().get(i).getY(), (int)picture.getLasts().get(i).getX(), (int)picture.getLasts().get(i).getY());
-				} catch (Exception exc) {
-				}
-				((View) this.cview).setModel(this.cview.getController().getModel());
-				this.cview.repaint();
+			try {
+				((Picture)getModel()).setCoded(Algo.encryption(picture.getFile(),picture.getFirsts(), picture.getLasts()));
+			} catch (Exception exc) {
 			}
+			((View) this.cview).setModel(this.cview.getController().getModel());
+			this.cview.repaint();
 		}
 	}
-	
+
 	public class SaveAction extends AbstractAction
 	{
 		CryptoView cview;
@@ -163,9 +161,15 @@ public class CryptoController extends Controller{
 
 		public void actionPerformed(ActionEvent e)
 		{
-			// code pour sauver le modele encrypter
-	        ((View) this.cview).setModel(this.cview.getController().getModel());
-	        this.cview.repaint();
+			String name = ((Picture) getModel()).getFile().getName();
+			Scanner s = new Scanner(name).useDelimiter(".");
+			String absolutePath = ((Picture) getModel()).getFile().getAbsolutePath();
+			String filePath = absolutePath.
+			    substring(0,absolutePath.lastIndexOf(File.separator));
+			try {
+				((Picture) getModel()).getCoded().printFile(new File(filePath+s.next()+".cry"));
+			} catch (IOException e1) {
+			}
 		}
 	}
 }

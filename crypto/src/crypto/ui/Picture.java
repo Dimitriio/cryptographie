@@ -8,12 +8,14 @@ import java.util.List;
 public class Picture {
 	
 	private File file;
-	private List<Point> firsts = new ArrayList<Point>();
-	private List<Point> lasts = new ArrayList<Point>();
+	private ArrayList<Point> firsts = new ArrayList<Point>();
+	private ArrayList<Point> lasts = new ArrayList<Point>();
+	private Coded coded;
 	
 	public Picture()
 	{
 		this.file = null;
+		this.coded = null;
 	}
 	
 	public Picture(File file) {
@@ -35,13 +37,22 @@ public class Picture {
 		this.lasts.add(p);
 	}
 	
-	public List<Point> getFirsts()
+	public ArrayList<Point> getFirsts()
 	{
 		return this.firsts;
 	}
 	
-	public List<Point> getLasts()
+	public ArrayList<Point> getLasts()
 	{
 		return this.lasts;
+	}
+	
+	public void setCoded(Coded coded)
+	{
+		this.coded = coded;
+	}
+
+	public Coded getCoded() {
+		return this.coded;
 	}
 }
