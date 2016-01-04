@@ -9,7 +9,10 @@ import java.io.File;
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -162,12 +165,14 @@ public class CryptoController extends Controller{
 		public void actionPerformed(ActionEvent e)
 		{
 			String name = ((Picture) getModel()).getFile().getName();
-			Scanner s = new Scanner(name).useDelimiter(".");
-			String absolutePath = ((Picture) getModel()).getFile().getAbsolutePath();
-			String filePath = absolutePath.
-			    substring(0,absolutePath.lastIndexOf(File.separator));
+			System.out.println(name);
+			StringTokenizer tokenizer = new StringTokenizer(((Picture) getModel()).getFile().getAbsolutePath(), ".");
+			String part = null;
+			if(tokenizer.hasMoreTokens()) { 
+			    part = tokenizer.nextToken();
+			}
 			try {
-				((Picture) getModel()).getCoded().printFile(new File(filePath+s.next()+".cry"));
+				((Picture) getModel()).getCoded().printFile(new File(part+".cry"));
 			} catch (IOException e1) {
 			}
 		}
