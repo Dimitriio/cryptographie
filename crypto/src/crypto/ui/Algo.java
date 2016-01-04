@@ -30,8 +30,8 @@ public class Algo {
 	
 	public static Coded encryption(BufferedImage image, ArrayList<Point> firsts, ArrayList<Point> lasts) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException{
 		/**File input is the not encrypted image, File output is the encrypted result of input
-		 * int x1, int y1 are the coordinates of the top left point of the area to encrypt
-		 * int x2, int y2 are the coordinates of the bottom right point of the area to encrypt
+		 * firsts is a list of the left top coordinates of the boxes
+		 * lasts is a list of the right bottom coordinates of the boxes
 		 * 
 		 * This method is reading every pixel of the image and encrypting it using an AES algorithm.
 		 * It returns a Coded object containing the new encrypted image, the encrypted area and the decodedKey (transient).
@@ -141,6 +141,12 @@ public class Algo {
 		return img;
 	}
 	
+	/**
+	 * Transform image to ByteArray
+	 * @param image
+	 * @return
+	 * @throws IOException
+	 */
 	public static byte[] imageToByteArray(BufferedImage image) throws IOException
 	{
 	    ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -149,15 +155,30 @@ public class Algo {
 	    return baos.toByteArray();
 	}
 	
+	/**
+	 * Transform secretKey to String
+	 * @param decodedKey
+	 * @return
+	 */
 	public static String secretKeyToString(SecretKey decodedKey){
 		return Base64.getEncoder().encodeToString(decodedKey.getEncoded());
 	}
 	
+	/**
+	 * Transfomr string to SecretKey
+	 * @param encodedKey
+	 * @return
+	 */
 	public static SecretKey stringToSecretKey(String encodedKey){
 		byte[] decodedKey = Base64.getDecoder().decode(encodedKey);
 		return new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
 	}
 	
+	/**
+	 * Make a clone of a bufferedImage
+	 * @param source
+	 * @return
+	 */
 	public static BufferedImage copyImage(BufferedImage source){
 	    BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
 	    Graphics g = b.getGraphics();
