@@ -137,6 +137,7 @@ public class CryptoController extends Controller{
 				    part = tokenizer.nextToken();
 				}
 				part = tokenizer.nextToken();
+				((Picture) getModel()).setExt(part);
 				if (!part.equals("cry")){
 					((Picture) getModel()).setUncoded(ImageIO.read(chooser.getSelectedFile()));
 				}
@@ -181,8 +182,13 @@ public class CryptoController extends Controller{
 			try {
 				if(!m.find()){
 					picture.setCoded(Algo.encryption(Algo.copyImage(picture.getUncoded()),picture.getFirsts(), picture.getLasts()));
+					picture.getCoded().setExt(picture.getExt());
+					this.cview.getField().setText(picture.getCoded().getKey());	
+					((Picture) getModel()).setUncoded(((Picture) getModel()).getCoded().getBuffImage());
 				}else{
+					picture.getCoded().setKey(this.cview.getField().getText());
 					picture.setUncoded(Algo.uncryption(picture.getCoded()));
+					picture.setExt(picture.getCoded().getExt());
 				}
 			} catch (Exception exc) {
 			}
@@ -211,14 +217,21 @@ public class CryptoController extends Controller{
 			if(tokenizer.hasMoreTokens()) { 
 			    part = tokenizer.nextToken();
 			}
-			try {				
-				FileOutputStream outputStream = new FileOutputStream(part+".cry");
-				ObjectOutputStream out = new ObjectOutputStream(outputStream);
-				out.writeObject(((Picture) getModel()).getCoded());
-				out.close();
-				outputStream.close();
-				
-				((Picture) getModel()).setUncoded(((Picture) getModel()).getCoded().getBuffImage());
+			String ext = tokenizer.nextToken();
+			try {
+				if(!ext.equals("cry")){
+					FileOutputStream outputStream = new FileOutputStream(part+".cry");
+					ObjectOutputStream out = new ObjectOutputStream(outputStream);
+					out.writeObject(((Picture) getModel()).getCoded());
+					out.close();
+					outputStream.close();
+					
+					System.out.println("Saved");
+				}
+				else {
+					File output = new File(part+"_uncrypted."+((Picture) getModel()).getExt());
+					ImageIO.write(((Picture) getModel()).getUncoded(), ((Picture) getModel()).getExt(), output);
+				}
 			} catch (IOException e1) {
 			}
 			

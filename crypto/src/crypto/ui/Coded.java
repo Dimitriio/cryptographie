@@ -11,18 +11,16 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public class Coded implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6497429996695417347L;
+
 	private byte[] crypted;
 	private byte[] image;
 	private transient String decodedKey;
+	private String ext;
 	
 	private ArrayList<Point> firsts;
 	private ArrayList<Point> lasts;
 	
-	public Coded(byte[] crypted, byte[] image, String decodedKey, ArrayList<Point> firsts, ArrayList<Point> lasts) {
+	public Coded(byte[] crypted, byte[] image, String decodedKey, ArrayList<Point> firsts, ArrayList<Point> lasts, String ext) {
 		/**This is the constructor of Coded, it created a coded file to save with encrypted data and the image; 
 		 * It takes the decodedKey but it does not Serialize it
 		 * x1 and y1 are the coordinates of the top left point of the encrypted area
@@ -32,7 +30,7 @@ public class Coded implements Serializable{
 		this.crypted = crypted;
 		this.image = image;
 		this.decodedKey = decodedKey;
-		
+		this.setExt(ext);
 		this.firsts = firsts;
 		this.lasts = lasts;
 	}
@@ -72,5 +70,13 @@ public class Coded implements Serializable{
 
 	public byte[] getImage() {
 		return this.image;
+	}
+
+	public String getExt() {
+		return ext;
+	}
+
+	public void setExt(String ext) {
+		this.ext = ext;
 	}
 }

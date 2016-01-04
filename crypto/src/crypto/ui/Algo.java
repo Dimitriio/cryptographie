@@ -98,7 +98,7 @@ public class Algo {
 		}
 		
 		// Creating the coded element with byte[] of encrypted and Image
-		return new Coded(buffer.array(), Algo.imageToByteArray(image), Algo.secretKeyToString(key), firsts, lasts);
+		return new Coded(buffer.array(), Algo.imageToByteArray(image), Algo.secretKeyToString(key), firsts, lasts, null);
 	}
 	
 	public static BufferedImage uncryption(Coded c) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, IOException{
@@ -117,11 +117,12 @@ public class Algo {
 		
 		Iterator<Point> f = c.getFirsts().iterator();
 		Iterator<Point> l = c.getLasts().iterator();
+		
+		int parsor = 0;
 		for(;f.hasNext();){
 			Point p1 = f.next();
 			Point p2 = l.next();
-		
-			int parsor = 0;
+				
 			for(int x = p1.x; x < p2.x; x++){
 				for(int y = p1.y; y < p2.y; y++){
 					// Creating a byte[] buffer

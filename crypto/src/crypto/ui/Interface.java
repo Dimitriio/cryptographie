@@ -42,6 +42,7 @@ public class Interface extends JFrame
 		buttons.add(new JButton(((CryptoController)this.cview.getController()).new SaveAction(cview))); 
 		buttons.add(new JButton(((CryptoController)this.cview.getController()).new GetKey(cview))); 
 		buttons.add(textField);
+		this.cview.setField(textField);
 
 
 		this.getContentPane().add(buttons, BorderLayout.SOUTH);
