@@ -1,9 +1,14 @@
 package crypto.ui;
 
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
+
+import javax.imageio.ImageIO;
 
 public class Picture {
 	
@@ -11,6 +16,7 @@ public class Picture {
 	private ArrayList<Point> firsts = new ArrayList<Point>();
 	private ArrayList<Point> lasts = new ArrayList<Point>();
 	private Coded coded;
+	private BufferedImage uncoded;
 	
 	public Picture()
 	{
@@ -18,13 +24,20 @@ public class Picture {
 		this.coded = null;
 	}
 	
-	public Picture(File file) {
+	public Picture(File file) throws IOException {
 		this.file = file;
+		this.coded = null;
+		this.uncoded = null;
 	}
 
 	public File getFile()
 	{
 		return this.file;
+	}
+
+	public void setFile(File file)
+	{
+		this.file = file;
 	}
 	
 	public void addFirst(Point p)
@@ -55,4 +68,13 @@ public class Picture {
 	public Coded getCoded() {
 		return this.coded;
 	}
+
+	public BufferedImage getUncoded() {
+		return uncoded;
+	}
+
+	public void setUncoded(BufferedImage uncoded) {
+		this.uncoded = uncoded;
+	}
+	
 }

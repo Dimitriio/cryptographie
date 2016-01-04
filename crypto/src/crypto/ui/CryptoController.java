@@ -6,7 +6,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -25,6 +29,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import crypto.ui.Coded;
 import ui.Controller;
 import ui.View;
 
@@ -114,16 +119,43 @@ public class CryptoController extends Controller{
 
 		public void actionPerformed(ActionEvent e)
 		{
-			// code pour ouvrir un fichier et le mettre dans le modele
-			JFileChooser chooser = new JFileChooser();
-			FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & CRY Images", "jpg", "cry");
-			chooser.setFileFilter(filter);
-			int returnVal = chooser.showOpenDialog(null);
-			if(returnVal == JFileChooser.APPROVE_OPTION) {
-				System.out.println("You chose to open this file: " +
-						chooser.getSelectedFile().getName());
+			try {
+				// code pour ouvrir un fichier et le mettre dans le modele
+				JFileChooser chooser = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & CRY Images", "jpg", "cry");
+				chooser.setFileFilter(filter);
+				int returnVal = chooser.showOpenDialog(null);
+				if(returnVal == JFileChooser.APPROVE_OPTION) {
+					System.out.println("You chose to open this file: " +
+							chooser.getSelectedFile().getName());
+				}
+				setModel(new Picture(chooser.getSelectedFile()));
+				
+				StringTokenizer tokenizer = new StringTokenizer(((Picture) getModel()).getFile().getAbsolutePath(), ".");
+				String part = null;
+				if(tokenizer.hasMoreTokens()) { 
+				    part = tokenizer.nextToken();
+				}
+				part = tokenizer.nextToken();
+				if (!part.equals("cry")){
+					((Picture) getModel()).setUncoded(ImageIO.read(chooser.getSelectedFile()));
+				}
+				else{
+					System.out.println(chooser.getSelectedFile().getAbsolutePath());
+					
+					FileInputStream inputStream = new FileInputStream(chooser.getSelectedFile().getAbsolutePath());
+					ObjectInputStream in = new ObjectInputStream(inputStream);
+					Coded c = (Coded) in.readObject();
+					in.close();
+					inputStream.close();
+					
+					((Picture) getModel()).setCoded(c);
+					((Picture) getModel()).setUncoded(c.getBuffImage());
+				}
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
-			setModel(new Picture(chooser.getSelectedFile()));
+			
 			((View) this.cview).setModel(this.cview.getController().getModel());
 	        this.cview.repaint();
 		}
@@ -146,23 +178,17 @@ public class CryptoController extends Controller{
 			Picture picture = (Picture) getModel();
 			Pattern p = Pattern.compile("(.*?).cry");
 			Matcher m = p.matcher(picture.getFile().getName());
-			if(!m.find()){
 			try {
-				((Picture)getModel()).setCoded(Algo.encryption(picture.getFile(),picture.getFirsts(), picture.getLasts()));
+				if(!m.find()){
+					picture.setCoded(Algo.encryption(Algo.copyImage(picture.getUncoded()),picture.getFirsts(), picture.getLasts()));
+				}else{
+					picture.setUncoded(Algo.uncryption(picture.getCoded()));
+				}
 			} catch (Exception exc) {
 			}
+			
 			((View) this.cview).setModel(this.cview.getController().getModel());
 			this.cview.repaint();
-		}else{
-			/*try {
-				((Picture)getModel()).setCoded(Algo.encryption(picture.getFile(),picture.getFirsts(), picture.getLasts()));
-			} catch (Exception exc) {
-			}
-			((View) this.cview).setModel(this.cview.getController().getModel());
-			this.cview.repaint();
-		*/
-			System.out.println("je decrypte");
-		}
 		}
 	}
 
@@ -180,17 +206,23 @@ public class CryptoController extends Controller{
 
 		public void actionPerformed(ActionEvent e)
 		{
-			String name = ((Picture) getModel()).getFile().getName();
-			System.out.println(name);
 			StringTokenizer tokenizer = new StringTokenizer(((Picture) getModel()).getFile().getAbsolutePath(), ".");
 			String part = null;
 			if(tokenizer.hasMoreTokens()) { 
 			    part = tokenizer.nextToken();
 			}
-			try {
-				((Picture) getModel()).getCoded().printFile(new File(part+".cry"));
+			try {				
+				FileOutputStream outputStream = new FileOutputStream(part+".cry");
+				ObjectOutputStream out = new ObjectOutputStream(outputStream);
+				out.writeObject(((Picture) getModel()).getCoded());
+				out.close();
+				outputStream.close();
+				
+				((Picture) getModel()).setUncoded(((Picture) getModel()).getCoded().getBuffImage());
 			} catch (IOException e1) {
 			}
+			
+			this.cview.repaint();
 		}
 	}
 	public class GetKey extends AbstractAction
@@ -210,4 +242,6 @@ public class CryptoController extends Controller{
 			// il reste à ajouter comment récuperer le text du jtextfield
 		}
 	}
+	
+
 }

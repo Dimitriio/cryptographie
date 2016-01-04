@@ -11,6 +11,10 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 public class Coded implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6497429996695417347L;
 	private byte[] crypted;
 	private byte[] image;
 	private transient String decodedKey;
@@ -37,6 +41,11 @@ public class Coded implements Serializable{
 		ByteArrayInputStream bais = new ByteArrayInputStream(image); 
 		BufferedImage buffer = ImageIO.read(bais);
 		ImageIO.write(buffer, "JPG", output);
+	}
+	
+	public BufferedImage getBuffImage() throws IOException{
+		ByteArrayInputStream bais = new ByteArrayInputStream(image); 
+		return ImageIO.read(bais);
 	}
 
 	public String getKey() {

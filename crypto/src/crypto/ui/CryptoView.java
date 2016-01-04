@@ -19,12 +19,7 @@ public class CryptoView extends View{
 	
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);
-		BufferedImage img = null;
-		try {
-		    img = ImageIO.read(((Picture) this.getModel()).getFile());
-		} catch (Exception exc) {
-		}
-		g.drawImage(img, 0, 0, null);
+		g.drawImage(((Picture) this.getModel()).getUncoded(), 0, 0, null);
 	}
 	
 	public CryptoController defaultController(Object model)

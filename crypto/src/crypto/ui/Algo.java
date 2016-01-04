@@ -1,5 +1,6 @@
 package crypto.ui;
 
+import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -35,7 +36,7 @@ public class Algo {
 	static final String ALGORITHM = "AES";
 	static final int WORD_SIZE = 16;
 	
-	public static Coded encryption(File input, ArrayList<Point> firsts, ArrayList<Point> lasts) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException{
+	public static Coded encryption(BufferedImage image, ArrayList<Point> firsts, ArrayList<Point> lasts) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException{
 		/**File input is the not encrypted image, File output is the encrypted result of input
 		 * int x1, int y1 are the coordinates of the top left point of the area to encrypt
 		 * int x2, int y2 are the coordinates of the bottom right point of the area to encrypt
@@ -43,9 +44,6 @@ public class Algo {
 		 * This method is reading every pixel of the image and encrypting it using an AES algorithm.
 		 * It returns a Coded object containing the new encrypted image, the encrypted area and the decodedKey (transient).
 		 */
-		
-		// Reading the input image ; Can create a IOExcetpion
-		BufferedImage image = ImageIO.read(input);
 		
 		// Creating the Key for Cipher ; Can create a NoSuchAlgorithmException
 		KeyGenerator factory = KeyGenerator.getInstance(ALGORITHM);
@@ -103,7 +101,7 @@ public class Algo {
 		return new Coded(buffer.array(), Algo.imageToByteArray(image), Algo.secretKeyToString(key), firsts, lasts);
 	}
 	
-	public static void uncryption(Coded c, File output) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, IOException{
+	public static BufferedImage uncryption(Coded c) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, IOException{
 		/**Coded contains byte[] buffer of crypted data, the decodedKey and the bufferedImage.
 		 * This method is reading very crypted word, uncrypt it and write the resulting it into the file.
 		 */
@@ -146,8 +144,8 @@ public class Algo {
 				}
 			}
 		}
-		// Finally we make the .jpg out of it.
-		ImageIO.write(img, "JPG", output);
+		
+		return img;
 	}
 	
 	public static byte[] imageToByteArray(BufferedImage image) throws IOException
@@ -165,5 +163,13 @@ public class Algo {
 	public static SecretKey stringToSecretKey(String encodedKey){
 		byte[] decodedKey = Base64.getDecoder().decode(encodedKey);
 		return new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
+	}
+	
+	public static BufferedImage copyImage(BufferedImage source){
+	    BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
+	    Graphics g = b.getGraphics();
+	    g.drawImage(source, 0, 0, null);
+	    g.dispose();
+	    return b;
 	}
 }
