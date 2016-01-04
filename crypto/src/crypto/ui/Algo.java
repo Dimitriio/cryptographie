@@ -117,27 +117,33 @@ public class Algo {
 		ByteArrayInputStream bais = new ByteArrayInputStream(c.getImage());
 		BufferedImage img = ImageIO.read(bais);
 		
-		int parsor = 0;
-		for(int x = c.getx1(); x < c.getx2(); x++){
-			for(int y = c.gety1(); y < c.gety2(); y++){
-				// Creating a byte[] buffer
-				byte[] buffer = new byte[WORD_SIZE];
-				for(int j = 0; j < WORD_SIZE; j++, parsor++)
-					buffer[j] = c.getCrypted()[parsor];
-				
-				// Getting the crypted pixel
-				//ByteBuffer b = ByteBuffer.wrap(buffer);
-				// Uncrypting the ByteBuffer ; Can create an exception
-				byte[] result = cipher.doFinal(buffer);
-				
-				//  Creating the int version of result
-				int pixel = (result[0]<<24)&0xff000000|
-					        (result[1]<<16)&0x00ff0000|
-					        (result[2]<< 8)&0x0000ff00|
-					        (result[3]<< 0)&0x000000ff;
-				
-				// We change the pixel
-				img.setRGB(x, y, pixel);
+		Iterator<Point> f = c.getFirsts().iterator();
+		Iterator<Point> l = c.getLasts().iterator();
+		for(;f.hasNext();){
+			Point p1 = f.next();
+			Point p2 = l.next();
+		
+			int parsor = 0;
+			for(int x = p1.x; x < p2.x; x++){
+				for(int y = p1.y; y < p2.y; y++){
+					// Creating a byte[] buffer
+					byte[] buffer = new byte[WORD_SIZE];
+					for(int j = 0; j < WORD_SIZE; j++, parsor++)
+						buffer[j] = c.getCrypted()[parsor];
+					
+					// Getting the crypted pixel
+					// Uncrypting the ByteBuffer ; Can create an exception
+					byte[] result = cipher.doFinal(buffer);
+					
+					//  Creating the int version of result
+					int pixel = (result[0]<<24)&0xff000000|
+						        (result[1]<<16)&0x00ff0000|
+						        (result[2]<< 8)&0x0000ff00|
+						        (result[3]<< 0)&0x000000ff;
+					
+					// We change the pixel
+					img.setRGB(x, y, pixel);
+				}
 			}
 		}
 		// Finally we make the .jpg out of it.
@@ -159,9 +165,5 @@ public class Algo {
 	public static SecretKey stringToSecretKey(String encodedKey){
 		byte[] decodedKey = Base64.getDecoder().decode(encodedKey);
 		return new SecretKeySpec(decodedKey, 0, decodedKey.length, "AES");
-	}
-	
-	public static void main(String[] args) {
-		
 	}
 }
