@@ -14,6 +14,9 @@ import ui.View;
 public class CryptoView extends View{
 	private JTextField f;
 	
+	 /**
+	  * defaultController is a method used to instantiate a new controller with default attributes.
+	  */
 	public CryptoView(Object model) {
 		super(model);
 		this.defaultController(model);

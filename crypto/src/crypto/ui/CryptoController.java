@@ -93,6 +93,12 @@ public class CryptoController extends Controller{
 	{
 	}
 	
+	/**
+	 * 
+	 * OpenFileAction is a subclass that define the action of the button Open File. 
+	 * It permits to open a JPG image or a CRY file which is the partial encrypted version of a JPG, to load this file in the model and to display in the UI.
+	 *
+	 */
 	public class OpenFileAction extends AbstractAction
 	{
 		CryptoView cview;
@@ -150,6 +156,13 @@ public class CryptoController extends Controller{
 		}
 	}
 	
+	/**
+	 * 
+	 * EncryptAction is a subclass that define the action of the button that encrypt/decrypt the opened File. 
+	 * It permits to encrypt the opened JPG image or decrypt the opened CRY file .
+	 * IT IS ENCRYPTED IN THE SOFTWARE, IT IS NOT SAVE YET
+	 * 
+	 */
 	public class EncryptAction extends AbstractAction
 	{
 		CryptoView cview;
@@ -186,6 +199,12 @@ public class CryptoController extends Controller{
 		}
 	}
 
+	/**
+	 * 
+	 * SaveAction is a subclass that define the action of the button that save the encrypted/decrypted File. 
+	 * It permits to save the encrypted JPG image or decrypt the decrypted CRY file at the same location that the original one.
+	 * 
+	 */
 	public class SaveAction extends AbstractAction
 	{
 		CryptoView cview;
