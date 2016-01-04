@@ -202,7 +202,7 @@ public class CryptoController extends Controller{
 	/**
 	 * 
 	 * SaveAction is a subclass that define the action of the button that save the encrypted/decrypted File. 
-	 * It permits to save the encrypted JPG image or decrypt the decrypted CRY file at the same location that the original one.
+	 * It permits to save the encrypted JPG image or save the decrypted CRY file at the same location that the original one.
 	 * 
 	 */
 	public class SaveAction extends AbstractAction
