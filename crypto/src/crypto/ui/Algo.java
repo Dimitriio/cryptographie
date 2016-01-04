@@ -1,5 +1,6 @@
 package crypto.ui;
 
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,7 +15,9 @@ import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -32,7 +35,7 @@ public class Algo {
 	static final String ALGORITHM = "AES";
 	static final int WORD_SIZE = 16;
 	
-	public static Coded encryption(File input, int x1, int y1, int x2, int y2) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException{
+	public static Coded encryption(File input, ArrayList<Point> firsts, ArrayList<Point> lasts) throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException{
 		/**File input is the not encrypted image, File output is the encrypted result of input
 		 * int x1, int y1 are the coordinates of the top left point of the area to encrypt
 		 * int x2, int y2 are the coordinates of the bottom right point of the area to encrypt
@@ -56,30 +59,47 @@ public class Algo {
 		
 		// Creating a new Random object to hide the encrypted pixels.
 		Random r = new Random();
-		// Calculating the size of the total encrypted data size in Bytes.
-		int size = WORD_SIZE*((x2-x1)*(y2-y1));
+
+		int size = 0;
+		Iterator<Point> f = firsts.iterator();
+		Iterator<Point> l = lasts.iterator();
+		for(;f.hasNext();){
+			Point p1 = f.next();
+			Point p2 = l.next();
+			
+			// Calculating the size of the total encrypted data size in Bytes.
+			size += WORD_SIZE*((p2.x-p1.x)*(p2.y-p1.y));
+		}	
 		// Creating a new ByteBuffer to take every Byte the algorithm is gonna give us;
 		ByteBuffer buffer = ByteBuffer.allocate(size);
-				
-		// Reading the area to encrypt and encrypting every pixel of it.
-		for(int x = x1; x < x2; x++){
-			for(int y = y1; y < y2; y++){
-				// Getting the pixel
-				int pixel = image.getRGB(x, y);
-				
-				// Creating the byte[] version of pixel
-				byte[] binary = ByteBuffer.allocate(4).putInt(pixel).array();
-				
-				// Putting it in buffer ; Can create a IllegalBlockSizeException
-				buffer.put(cipher.doFinal(binary));
-				
-				// Randomize the original image pixel
-				image.setRGB(x, y, r.nextInt());
+					
+		f = firsts.iterator();
+		l = lasts.iterator();
+		for(;f.hasNext();){
+			Point p1 = f.next();
+			Point p2 = l.next();
+		
+			// Reading the area to encrypt and encrypting every pixel of it.
+			for(int x = p1.x; x < p2.x; x++){
+				for(int y = p1.y; y < p2.y; y++){
+					// Getting the pixel
+					int pixel = image.getRGB(x, y);
+					
+					// Creating the byte[] version of pixel
+					byte[] binary = ByteBuffer.allocate(4).putInt(pixel).array();
+					
+					// Putting it in buffer ; Can create a IllegalBlockSizeException
+					buffer.put(cipher.doFinal(binary));
+					
+					// Randomize the original image pixel
+					image.setRGB(x, y, r.nextInt());
+				}
 			}
+			
 		}
-
+		
 		// Creating the coded element with byte[] of encrypted and Image
-		return new Coded(buffer.array(), Algo.imageToByteArray(image), Algo.secretKeyToString(key), x1, y1, x2, y2);
+		return new Coded(buffer.array(), Algo.imageToByteArray(image), Algo.secretKeyToString(key), firsts, lasts);
 	}
 	
 	public static void uncryption(Coded c, File output) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, IOException{
