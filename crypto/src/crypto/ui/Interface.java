@@ -45,7 +45,9 @@ public class Interface extends JFrame
 		this.getContentPane().add(this.cview, BorderLayout.CENTER);
 	}
 
-
+	/**
+	 * buildModel is a method which initialize a new picture using its default constructor in a model
+	 */
 	private void buildModel()
 	{
 		this.model = new Picture();
