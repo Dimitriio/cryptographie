@@ -113,7 +113,7 @@ public class CryptoController extends Controller{
 		{
 			// code pour ouvrir un fichier et le mettre dans le modele
 			JFileChooser chooser = new JFileChooser();
-			FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG Images", "jpg");
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & CRY Images", "jpg", "cry");
 			chooser.setFileFilter(filter);
 			int returnVal = chooser.showOpenDialog(null);
 			if(returnVal == JFileChooser.APPROVE_OPTION) {
