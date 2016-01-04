@@ -1,6 +1,5 @@
 package ui;
 
-import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -11,8 +10,6 @@ public class Controller implements MouseListener, MouseMotionListener, KeyListen
 {
 	private Object model;
 	private View view;
-	protected Point firstClick;
-	protected Point lastClick;
 	protected boolean mousePressed;
 	
 	public Controller(Object newModel)

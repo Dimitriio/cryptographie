@@ -28,9 +28,6 @@ public class Interface extends JFrame
 		
 		this.cview = new CryptoView(this.model);
 		this.cview.setPreferredSize(new Dimension(300,300));
-		/*Menu menu = new Menu(model, cview);
-		menu.createMenu();
-		this.setJMenuBar(menu.getMenuBar());*/
 		
 		JPanel buttons = new JPanel();
 		buttons.setLayout(new GridLayout(1,3,5,5));
@@ -46,7 +43,6 @@ public class Interface extends JFrame
 	private void buildModel()
 	{
 		this.model = new Picture();
-		// ici on peut ajouter un modele au lancement 
 	}
 	
 	public static void main(String[] args)

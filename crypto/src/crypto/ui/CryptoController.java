@@ -1,10 +1,22 @@
 package crypto.ui;
 
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import ui.Controller;
 import ui.View;
@@ -20,7 +32,8 @@ public class CryptoController extends Controller{
 		this.mousePressed=true;
 		if(e.getButton() == MouseEvent.BUTTON1)
 		{
-			this.lastClick= e.getPoint();
+			((Picture) this.getModel()).addFirst(e.getPoint());
+			this.getView().setModel(this.getModel());
 		}
 		else if(e.getButton() == MouseEvent.BUTTON3)
 		{
@@ -31,13 +44,15 @@ public class CryptoController extends Controller{
 	public void mouseReleased(MouseEvent e)
 	{
 		this.mousePressed=false;
-		/*if(e.getButton() == MouseEvent.BUTTON1)
+		if(e.getButton() == MouseEvent.BUTTON1)
 		{
+			((Picture) this.getModel()).addLast(e.getPoint());
+			this.getView().setModel(this.getModel());
 		}
 		else if(e.getButton() == MouseEvent.BUTTON3)
 		{
 			// à faire pour avoir une action sur le click droit
-		}*/
+		}
 	}
 
 	public void mouseClicked(MouseEvent e)
@@ -60,8 +75,7 @@ public class CryptoController extends Controller{
 	{
 		if(mousePressed==true)
 		{
-			// this.firstClick est la premiere coordonnée
-			// this.lastClick est la deuxieme coordonnee du rectangle de selection
+			
 			super.getView().setModel(this.getModel());
 			super.getView().repaint();
 		}
@@ -94,7 +108,16 @@ public class CryptoController extends Controller{
 		public void actionPerformed(ActionEvent e)
 		{
 			// code pour ouvrir un fichier et le mettre dans le modele
-	        ((View) this.cview).setModel(this.cview.getController().getModel());
+			JFileChooser chooser = new JFileChooser();
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG Images", "jpg");
+			chooser.setFileFilter(filter);
+			int returnVal = chooser.showOpenDialog(null);
+			if(returnVal == JFileChooser.APPROVE_OPTION) {
+				System.out.println("You chose to open this file: " +
+						chooser.getSelectedFile().getName());
+			}
+			setModel(new Picture(chooser.getSelectedFile()));
+			((View) this.cview).setModel(this.cview.getController().getModel());
 	        this.cview.repaint();
 		}
 	}
@@ -113,9 +136,16 @@ public class CryptoController extends Controller{
 
 		public void actionPerformed(ActionEvent e)
 		{
-			// code permettant de crypter l'image et le mettre dans le modele ?
-	        ((View) this.cview).setModel(this.cview.getController().getModel());
-	        this.cview.repaint();
+			Picture picture = (Picture) getModel();
+			for(int i = 0; i< picture.getFirsts().size(); i++)
+			{
+				try {
+					Algo.encryption(picture.getFile(),(int) picture.getFirsts().get(i).getX(), (int)picture.getFirsts().get(i).getY(), (int)picture.getLasts().get(i).getX(), (int)picture.getLasts().get(i).getY());
+				} catch (Exception exc) {
+				}
+				((View) this.cview).setModel(this.cview.getController().getModel());
+				this.cview.repaint();
+			}
 		}
 	}
 	

@@ -1,25 +1,47 @@
 package crypto.ui;
 
 import java.awt.Point;
-import java.awt.Rectangle;
-import java.util.Map;
-import java.util.TreeMap;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Picture {
 	
-	// reste a definir ce que doivent etre les attributs
+	private File file;
+	private List<Point> firsts = new ArrayList<Point>();
+	private List<Point> lasts = new ArrayList<Point>();
 	
-	/*public void addAttributes(Attributes a){
-		this.attributes.put(a.getId(), a);
+	public Picture()
+	{
+		this.file = null;
 	}
 	
-	public Attributes getAttributes(String s){
-		return (Attributes)this.attributes.get(s);
+	public Picture(File file) {
+		this.file = file;
+	}
+
+	public File getFile()
+	{
+		return this.file;
 	}
 	
-	public abstract Point getLoc();
-	public abstract void setLoc(Point p);
-	public abstract void translate(int dx,int dy);
-	public abstract Rectangle getBounds();
-	public abstract void accept(ShapeVisitor sv);*/
+	public void addFirst(Point p)
+	{
+		this.firsts.add(p);
+	}
+	
+	public void addLast(Point p)
+	{
+		this.lasts.add(p);
+	}
+	
+	public List<Point> getFirsts()
+	{
+		return this.firsts;
+	}
+	
+	public List<Point> getLasts()
+	{
+		return this.lasts;
+	}
 }
