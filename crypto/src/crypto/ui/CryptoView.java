@@ -1,12 +1,10 @@
 package crypto.ui;
 
+import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.awt.Point;
+import java.util.Iterator;
 
-import javax.imageio.ImageIO;
 import javax.swing.JTextField;
 
 import ui.View;
@@ -27,7 +25,31 @@ public class CryptoView extends View{
 	  */
 	protected void paintComponent(Graphics g){
 		super.paintComponent(g);
-		g.drawImage(((Picture) this.getModel()).getUncoded(), 0, 0, null);
+		Picture p = (Picture) this.getModel();
+		CryptoController c = (CryptoController) this.getController();
+		g.drawImage(p.getUncoded(), 0, 0, null);
+		
+		g.setColor(Color.RED);
+		if (p.getCoded() == null | p.getUncoded() == null){
+			Iterator<Point> f = p.getFirsts().iterator();
+			Iterator<Point> l = p.getLasts().iterator();
+			for(;f.hasNext();){
+				Point p1 = f.next();
+				Point p2 = null;
+				
+				if(l.hasNext())
+					p2 = l.next();
+					
+				if(p2 != null)
+					g.drawRect(p1.x, p1.y, p2.x-p1.x, p2.y-p1.y);
+				else {
+					g.drawRect(p1.x, p1.y, c.x-p1.x, c.y-p1.y);
+				}
+			}
+		}
+		else {
+			
+		}
 	}
 	
 	 /**

@@ -24,12 +24,17 @@ import ui.View;
 
 public class CryptoController extends Controller{
 	
+	public int x, y;
+	
 	public CryptoController(Object newModel) {
 		super(newModel);
 	}
 	
 	public void mousePressed(MouseEvent e)
 	{
+		this.x = e.getX();
+		this.y = e.getY();
+		
 		this.mousePressed=true;
 		if(e.getButton() == MouseEvent.BUTTON1)
 		{
@@ -40,6 +45,7 @@ public class CryptoController extends Controller{
 		{
 			// à faire pour avoir une action sur le click droit
 		}
+		this.getView().repaint();
 	}
 
 	public void mouseReleased(MouseEvent e)
@@ -54,6 +60,7 @@ public class CryptoController extends Controller{
 		{
 			// à faire pour avoir une action sur le click droit
 		}
+		this.getView().repaint();
 	}
 
 	public void mouseClicked(MouseEvent e)
@@ -70,15 +77,14 @@ public class CryptoController extends Controller{
 	
 	public void mouseMoved(MouseEvent evt)
 	{
+		this.getView().repaint();
 	}
 	
 	public void mouseDragged(MouseEvent evt)
 	{
-		if(mousePressed==true)
-		{
-			super.getView().setModel(this.getModel());
-			super.getView().repaint();
-		}
+		this.x = evt.getX();
+		this.y = evt.getY();
+		this.getView().repaint();
 	}
 	
 	public void keyTyped(KeyEvent evt)
@@ -148,7 +154,6 @@ public class CryptoController extends Controller{
 					((Picture) getModel()).setUncoded(c.getBuffImage());
 				}
 			} catch (Exception ex) {
-				ex.printStackTrace();
 			}
 			
 			((View) this.cview).setModel(this.cview.getController().getModel());
@@ -192,7 +197,6 @@ public class CryptoController extends Controller{
 					picture.setExt(picture.getCoded().getExt());
 				}
 			} catch (Exception exc) {
-				exc.printStackTrace();
 			}
 			
 			((View) this.cview).setModel(this.cview.getController().getModel());
