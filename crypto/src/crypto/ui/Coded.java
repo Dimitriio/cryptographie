@@ -14,13 +14,14 @@ public class Coded implements Serializable{
 
 	private byte[] crypted;
 	private byte[] image;
+	private byte[] iv;
 	private transient String decodedKey;
 	private String ext;
 	
 	private ArrayList<Point> firsts;
 	private ArrayList<Point> lasts;
 	
-	public Coded(byte[] crypted, byte[] image, String decodedKey, ArrayList<Point> firsts, ArrayList<Point> lasts, String ext) {
+	public Coded(byte[] crypted, byte[] image, String decodedKey, byte[] iv, ArrayList<Point> firsts, ArrayList<Point> lasts, String ext) {
 		/**This is the constructor of Coded, it created a coded file to save with encrypted data and the image; 
 		 * It takes the decodedKey but it does not Serialize it
 		 * firsts is the list of top left point of the encrypted areas
@@ -29,6 +30,7 @@ public class Coded implements Serializable{
 
 		this.crypted = crypted;
 		this.image = image;
+		this.iv = iv;
 		this.decodedKey = decodedKey;
 		this.setExt(ext);
 		this.firsts = firsts;
@@ -78,5 +80,9 @@ public class Coded implements Serializable{
 
 	public void setExt(String ext) {
 		this.ext = ext;
+	}
+	
+	public byte[] getIv(){
+		return iv;
 	}
 }

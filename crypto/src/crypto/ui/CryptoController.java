@@ -192,6 +192,7 @@ public class CryptoController extends Controller{
 					picture.setExt(picture.getCoded().getExt());
 				}
 			} catch (Exception exc) {
+				exc.printStackTrace();
 			}
 			
 			((View) this.cview).setModel(this.cview.getController().getModel());
