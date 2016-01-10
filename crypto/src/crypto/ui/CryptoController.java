@@ -1,5 +1,8 @@
 package crypto.ui;
 
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -9,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,7 +28,9 @@ import ui.View;
 
 public class CryptoController extends Controller{
 	
-	public int x, y;
+	public int xFirst, yFirst;
+	public int width, height;
+	public int xLock, yLock;
 	
 	public CryptoController(Object newModel) {
 		super(newModel);
@@ -32,34 +38,48 @@ public class CryptoController extends Controller{
 	
 	public void mousePressed(MouseEvent e)
 	{
-		this.x = e.getX();
-		this.y = e.getY();
+		this.xFirst = e.getX();
+		this.yFirst = e.getY();
+		this.width = 0;
+		this.height = 0;
 		
 		this.mousePressed=true;
-		if(e.getButton() == MouseEvent.BUTTON1)
-		{
-			((Picture) this.getModel()).addFirst(e.getPoint());
-			this.getView().setModel(this.getModel());
-		}
-		else if(e.getButton() == MouseEvent.BUTTON3)
-		{
-			// à faire pour avoir une action sur le click droit
-		}
+		
 		this.getView().repaint();
 	}
 
 	public void mouseReleased(MouseEvent e)
 	{
+		Picture p = (Picture) this.getModel();
 		this.mousePressed=false;
-		if(e.getButton() == MouseEvent.BUTTON1)
-		{
-			((Picture) this.getModel()).addLast(e.getPoint());
-			this.getView().setModel(this.getModel());
+		
+		int x = xLock < xFirst ? xLock : xFirst;
+		int y = yLock < yFirst ? yLock : yFirst;
+		
+		Rectangle r1 = new Rectangle(new Point(x, y), new Dimension(width, height));
+		
+		boolean doContains = false;
+		Iterator<Point> f = p.getFirsts().iterator();
+		Iterator<Point> l = p.getLasts().iterator();
+		for(;f.hasNext() && l.hasNext();){
+			Point p1 = f.next();
+			Point p2 = l.next();
+		
+			Rectangle r2 = new Rectangle(p1, new Dimension(p2.x - p1.x, p2.y - p1.y));
+			
+			if (r1.intersects(r2)){
+				doContains = true;
+				break;
+			}
 		}
-		else if(e.getButton() == MouseEvent.BUTTON3)
-		{
-			// à faire pour avoir une action sur le click droit
+		
+		if(!doContains){
+			p.addFirst(new Point(x, y));
+			p.addLast(new Point(x+width, y+height));
 		}
+		
+		width = 0;
+		height = 0;
 		this.getView().repaint();
 	}
 
@@ -82,8 +102,21 @@ public class CryptoController extends Controller{
 	
 	public void mouseDragged(MouseEvent evt)
 	{
-		this.x = evt.getX();
-		this.y = evt.getY();
+		int xLast = evt.getX();
+		int yLast = evt.getY();
+		
+		height = Math.abs(yLast - yFirst);
+		width = Math.abs(xLast - xFirst);
+		
+		if (xFirst > xLast)
+			xLock = xFirst - width;
+		else
+			xLock = xFirst;
+		if (yFirst > yLast)
+			yLock = yFirst - height;
+		else
+			yLock = yFirst;
+		
 		this.getView().repaint();
 	}
 	
@@ -141,9 +174,7 @@ public class CryptoController extends Controller{
 				if (!part.equals("cry")){
 					((Picture) getModel()).setUncoded(ImageIO.read(chooser.getSelectedFile()));
 				}
-				else{
-					System.out.println(chooser.getSelectedFile().getAbsolutePath());
-					
+				else{					
 					FileInputStream inputStream = new FileInputStream(chooser.getSelectedFile().getAbsolutePath());
 					ObjectInputStream in = new ObjectInputStream(inputStream);
 					Coded c = (Coded) in.readObject();
@@ -243,6 +274,7 @@ public class CryptoController extends Controller{
 				else {
 					File output = new File(part+"_uncrypted."+((Picture) getModel()).getExt());
 					ImageIO.write(((Picture) getModel()).getUncoded(), ((Picture) getModel()).getExt(), output);
+					System.out.println("Saved");
 				}
 			} catch (IOException e1) {
 			}

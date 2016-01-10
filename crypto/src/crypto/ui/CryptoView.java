@@ -30,22 +30,17 @@ public class CryptoView extends View{
 		g.drawImage(p.getUncoded(), 0, 0, null);
 		
 		g.setColor(Color.RED);
-		if (p.getCoded() == null | p.getUncoded() == null){
+		if ((p.getCoded() == null || p.getUncoded() == null) && !(p.getCoded() == null && p.getUncoded() == null)){
 			Iterator<Point> f = p.getFirsts().iterator();
 			Iterator<Point> l = p.getLasts().iterator();
-			for(;f.hasNext();){
+			for(;f.hasNext() && l.hasNext();){
 				Point p1 = f.next();
-				Point p2 = null;
+				Point p2 = l.next();
 				
-				if(l.hasNext())
-					p2 = l.next();
-					
-				if(p2 != null)
-					g.drawRect(p1.x, p1.y, p2.x-p1.x, p2.y-p1.y);
-				else {
-					g.drawRect(p1.x, p1.y, c.x-p1.x, c.y-p1.y);
-				}
+				g.drawRect(p1.x, p1.y, p2.x-p1.x, p2.y-p1.y);	
 			}
+			
+			g.drawRect(c.xLock, c.yLock, c.width, c.height);
 		}
 		else {
 			
